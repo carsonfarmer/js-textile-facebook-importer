@@ -1,0 +1,41 @@
+{
+  "name": "js-textile-facebook-importer",
+  "description": "Simple cli tool to import facebook json data dump into Textile",
+  "version": "0.0.1",
+  "author": "Carson Farmer <carson@textile.io>",
+  "bin": {
+    "txtl-import": "./bin/run"
+  },
+  "bugs": "https://github.com/textileio/js-textile-facebook-importer/issues",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "@textile/js-http-client": "^1.0.2",
+    "jszip": "^3.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.13",
+    "eslint-config-oclif": "^3.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/src"
+  ],
+  "homepage": "https://github.com/textileio/js-textile-facebook-importer",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "oclif": {
+    "bin": "txtl-import"
+  },
+  "scripts": {
+    "posttest": "eslint .",
+    "test": "echo NO TESTS"
+  }
+}
