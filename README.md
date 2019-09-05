@@ -4,7 +4,7 @@ js-textile-facebook-importer
 Simple cli tool to import facebook json data dump into Textile
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![License](https://img.shields.io/npm/l/js-textile-facebook-importer.svg)](https://github.com/carsonfarmer/js-textile-facebook-importer/blob/master/package.json)
+[![License](https://img.shields.io/github/license/carsonfarmer/js-textile-facebook-importer)](https://github.com/carsonfarmer/js-textile-facebook-importer/blob/master/LICENSE)
 
 # Usage
 
