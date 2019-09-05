@@ -4,12 +4,20 @@ var fs = require('fs')
 var textile = require('@textile/js-http-client').default
 var uuid = require('uuid/v4')
 
-function main(path) {
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    // eslint-disable-next-line no-await-in-loop
+    await callback(array[index], index, array)
+  }
+}
+
+function main(path, address) {
   fs.readFile(path, async function (err, data) {
     if (err) throw err
     const media = await textile.schemas.defaultByName('media')
     const zip = await JSZip.loadAsync(data)
-    zip.folder('photos_and_videos').folder('album').forEach(async (relativePath, file) => {
+    const albums = zip.folder('photos_and_videos').folder('album')
+    albums.forEach(async (relativePath, file) => {
       if (file.name.endsWith('.json')) {
         const doc = await file.async('text')
         const album = JSON.parse(doc)
@@ -17,7 +25,7 @@ function main(path) {
         const photos = album.photos
         const key = `textile_photos-shared-${uuid()}`
         const thread = await textile.threads.add(name, media, key, 'open', 'shared')
-        photos.forEach(async photo => {
+        await asyncForEach(photos, async photo => {
           const file = zip.file(photo.uri)
           const data = await file.async('nodebuffer')
           try {
@@ -32,6 +40,11 @@ function main(path) {
             console.log(error.toString())
           }
         })
+        if (address) {
+          await textile.invites.add(thread.id, address)
+          // eslint-disable-next-line no-console
+          console.log(`invite to thread ${thread.id} sent to peer ${address}...`)
+        }
       }
     })
   })
@@ -39,10 +52,11 @@ function main(path) {
 
 class JsTextileFacebookImporterCommand extends Command {
   async run() {
-    const {args} = this.parse(JsTextileFacebookImporterCommand)
+    const {flags, args} = this.parse(JsTextileFacebookImporterCommand)
     const path = args.zip
+    const address = flags.address || undefined
     this.log(`processing ${path}`)
-    main(path)
+    main(path, address)
   }
 }
 
@@ -65,6 +79,8 @@ JsTextileFacebookImporterCommand.flags = {
   version: flags.version({char: 'v'}),
   // add --help flag to show CLI version
   help: flags.help({char: 'h'}),
+  // add --address flag to support auto-generating invites to specific users
+  address: flags.string({char: 'a', description: 'Specify which peer address to auto-invite to created threads'}),
 }
 
 module.exports = JsTextileFacebookImporterCommand
