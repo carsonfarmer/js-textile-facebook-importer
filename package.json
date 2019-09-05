@@ -12,7 +12,8 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
     "@textile/js-http-client": "^1.0.2",
-    "jszip": "^3.2.2"
+    "jszip": "^3.2.2",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^5.13",

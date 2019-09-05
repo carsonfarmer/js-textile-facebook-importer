@@ -2,6 +2,7 @@ const {Command, flags} = require('@oclif/command')
 var JSZip = require('jszip')
 var fs = require('fs')
 var textile = require('@textile/js-http-client').default
+var uuid = require('uuid/v4')
 
 function main(path) {
   fs.readFile(path, async function (err, data) {
@@ -14,7 +15,8 @@ function main(path) {
         const album = JSON.parse(doc)
         const name = album.name
         const photos = album.photos
-        const thread = await textile.threads.add(name, media, undefined, 'open', 'shared')
+        const key = `textile_photos-shared-${uuid()}`
+        const thread = await textile.threads.add(name, media, key, 'open', 'shared')
         photos.forEach(async photo => {
           const file = zip.file(photo.uri)
           const data = await file.async('nodebuffer')
