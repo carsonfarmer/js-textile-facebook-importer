@@ -23,7 +23,7 @@ function main(path) {
           try {
             const added = await textile.files.add(data, photo.description || '', thread.id)
             if (photo.comments) {
-              photo.comments.forEach(comment => {
+              [...photo.comments].reverse().forEach(comment => {
                 textile.comments.add(added.block, `${comment.author}: ${comment.comment}`)
               })
             }
